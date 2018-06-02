@@ -1,0 +1,56 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\regin\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\WINDOWS\System32\OpenSSH\;C:\Users\regin\AppData\Local\Microsoft\WindowsApps;;C:\Program Files\Microsoft VS Code\bin;C:\Users\regin\AppData\Roaming\npm
+
+Yarn version: 
+  1.6.0
+
+Node version: 
+  9.11.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\Users\regin\Dropbox\react-native-video-player-no-linking\node_modules\ajv\lib\dot'
+
+npm manifest: 
+  {
+    "main": "node_modules/expo/AppEntry.js",
+    "private": false,
+    "version": "0.0.4",
+    "description": "A simple react native video player component suitable for dropping into expo.io and other react native applications.  It contains no native platform specific code.",
+    "dependencies": {
+      "expo": "^27.0.1",
+      "react": "16.3.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
+      "react-native-ui-kitten": "^3.0.1",
+      "react-native-slider": "^0.11.0"
+    },
+    "devDependencies": {
+      "gulp": "^4.0.0",
+      "gulp-bump": "^3.1.1",
+      "gulp-concat": "^2.6.1",
+      "gulp-json-editor": "^2.4.1",
+      "gulp-run": "^1.7.1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/reggie3/react-native-video-player-no-linking .git"
+    },
+    "keywords": ["react-native", "expo.io", "video", "player", "javascript"],
+    "author": "Reginald Johnson",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/reggie3/react-native-video-player-no-linking /issues"
+    },
+    "homepage": "https://github.com/reggie3/react-native-video-player-no-linking #readme"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
