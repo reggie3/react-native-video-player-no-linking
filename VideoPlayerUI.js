@@ -2,8 +2,12 @@ import React from 'react';
 import { RkButton, RkTheme } from 'react-native-ui-kitten';
 import { FontAwesome } from '@expo/vector-icons';
 
-const ICON_SIZE =36;
+const ICON_SIZE = 30;
 const roundButtonStyle = {
+  elevation: 5,
+  shadowOffset: {width: 5, height: 3},
+  shadowColor: 'black',
+  shadowOpacity: 0.5,
   borderRadius: 25,
   width: 50,
   height: 50,
@@ -19,14 +23,14 @@ RkTheme.setType('RkButton', 'disabled', {
 export const GetPlayButtonByStatus = (props) => {
   if (props.playStatus === 'LOADING' || props.playStatus === 'BUFFERING') {
     // show disabled play button
-    return getDisabledButton(
+    return (
       <RkButton rkType="disabled" style={roundButtonStyle} onPress={() => {}}>
         <FontAwesome name="hourglass" color="white" size={ICON_SIZE} />
       </RkButton>
     );
   } else if (props.playStatus === 'STOPPED') {
     // show active play button
-    return getActiveButton(
+    return (
       <RkButton
         rkType="success"
         style={roundButtonStyle}
@@ -102,7 +106,7 @@ export const GetReplayButtonByStatus = (props) => {
       style={roundButtonStyle}
       onPress={props.onReplayPress}
     >
-      <FontAwesome name="replay" color="white" size={ICON_SIZE} />
+      <FontAwesome name="undo" color="white" size={ICON_SIZE} />
     </RkButton>
   );
 };

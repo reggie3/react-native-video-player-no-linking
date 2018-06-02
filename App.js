@@ -27,7 +27,7 @@ export default class App extends React.Component {
 
         <View
           style={{
-            backgroundColor: 'lightblue',
+            backgroundColor: '#F0D3C9',
             padding: 5,
             display: 'flex',
             flex: 1
@@ -51,10 +51,14 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#eee'
+    backgroundColor: '#D3F0C9'
   },
   statusBar: {
-    backgroundColor: '#C2185B',
-    height: Constants.statusBarHeight
+    backgroundColor: '#D3F0C9',
+    height: Constants.statusBarHeight,
+    elevation: 2,
+    shadowOffset: {width: 5, height: 3},
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
   }
 });
