@@ -41,6 +41,10 @@ export default class App extends React.Component {
             shouldPlay={false}
             isLooping={this.props.isLooping}
             onPlayComplete={this.onPlayComplete}
+            timeStampStyle={{ 
+              color: '#ff22ff',
+              fontSize: 20
+          }}
           />
         </View>
       </View>

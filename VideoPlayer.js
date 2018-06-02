@@ -122,9 +122,9 @@ class VideoPlayer extends Component {
         <View
           style={{
             flexDirection: 'row',
-            padding: 5,
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'space-between',
+            margin: 5
           }}
         >
           {GetPlayButtonByStatus({
@@ -138,6 +138,16 @@ class VideoPlayer extends Component {
               onValueChange={this.onSliderValueChange}
               value={this.state.positionMillis}
             />
+          ) : null}
+          {this.props.showTimeStamp ? (
+              <View style={{marginHorizontal: 3}}>
+            <PlaybackTimeStamp
+              playStatus={this.state.playStatus}
+              positionMillis={this.state.positionMillis}
+              durationMillis={this.state.durationMillis}
+              timeStampStyle={this.props.timeStampStyle}
+            />
+            </View>
           ) : null}
           {GetReplayButtonByStatus({
             playStatus: this.playStatus,
@@ -160,8 +170,8 @@ VideoPlayer.propTypes = {
 
 VideoPlayer.defaultProps = {
   timeStampStyle: {
-    color: 'blue',
-    fontSize: 24
+    color: '#222222',
+    fontSize: 20
   },
   showTimeStamp: true,
   showPlaybackSlider: true,
