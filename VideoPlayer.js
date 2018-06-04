@@ -73,7 +73,7 @@ class VideoPlayer extends Component {
         });
       }
     } else {
-      console.warn('Unhandled playback status in onPlaybackStatusUpdate: ', status)
+      console.log('Unhandled playback status in onPlaybackStatusUpdate: ', status)
     }
   };
 
