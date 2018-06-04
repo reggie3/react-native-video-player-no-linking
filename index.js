@@ -1,8 +1,2 @@
-import 'expo';
-import Recorder from './Recorder';
-import Player from './Player';
-
-module.exports = {
-    Player,
-    Recorder
-};
+import VideoPlayer from './VideoPlayer';
+export default VideoPlayer;
