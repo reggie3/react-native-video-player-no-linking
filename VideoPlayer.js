@@ -73,7 +73,7 @@ class VideoPlayer extends Component {
         });
       }
     } else {
-      debugger;
+      console.warn('Unhandled playback status in onPlaybackStatusUpdate: ', status)
     }
   };
 
@@ -110,7 +110,7 @@ class VideoPlayer extends Component {
             shadowColor: 'black',
             shadowOpacity: 0.5
           }}
-          source={{ uri: this.props.uri }}
+          source={this.props.uri }
           rate={this.props.rate}
           volume={this.props.volume}
           resizeMode={Video.RESIZE_MODE_CONTAIN}

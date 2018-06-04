@@ -27,7 +27,8 @@
       "react/prop-types": [0],
       "no-debugger": "warn",
       "no-console": 0,
-      "react/display-name": [0]
+      "react/display-name": [0],
+      "MD026/no-trailing-punctuation": [0]
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"]
   }

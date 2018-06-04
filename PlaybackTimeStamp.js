@@ -36,7 +36,6 @@ const PlaybackTimeStamp = (props) => {
     I  knew that would work, and didn't want to incur risk by
     deviating from Expo's example too much
      */
-  debugger;
   if (props.playStatus === 'PAUSED') {
     return (
       <BlinkView blinking={true} delay={750}>
