@@ -144,9 +144,7 @@ class VideoPlayer extends Component {
                   shadowColor: 'black',
                   shadowOpacity: 0.5
                 }}
-                source={{
-                  uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
-                }} //{this.props.uri }
+                source={{uri: this.props.uri }}
                 rate={this.props.rate}
                 volume={this.props.volume}
                 resizeMode={Video.RESIZE_MODE_CONTAIN}

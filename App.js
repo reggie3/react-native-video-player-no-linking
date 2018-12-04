@@ -42,7 +42,7 @@ export default class App extends React.Component {
             isLooping={this.props.isLooping}
             onPlayComplete={this.onPlayComplete}
             timeStampStyle={{
-              color: '#ffffff',
+              color: '#000000',
               fontSize: 20
             }}
             onError={(error) => {
