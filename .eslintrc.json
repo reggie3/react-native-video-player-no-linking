@@ -1,22 +1,22 @@
 {
-    "env": {
+  "env": {
       "browser": true,
       "commonjs": true,
       "es6": true,
       "mocha": true,
       "node": false
-    },
-    "parser": "babel-eslint",
-    "parserOptions": {
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
       "ecmaFeatures": {
-        "jsx": true
+          "jsx": true
       },
       "sourceType": "module"
-    },
-    "plugins": ["react", "react-native"],
-    "rules": {
-      "react-native/no-unused-styles": 2,
-  
+  },
+  "plugins": [
+      "react"
+  ],
+  "rules": {
       "no-const-assign": "warn",
       "no-this-before-super": "warn",
       "no-undef": "warn",
@@ -25,11 +25,11 @@
       "constructor-super": "warn",
       "valid-typeof": "warn",
       "react/prop-types": [0],
-      "no-debugger": "warn",
-      "no-console": 0,
-      "react/display-name": [0],
-      "MD026/no-trailing-punctuation": [0]
-    },
-    "extends": ["eslint:recommended", "plugin:react/recommended"]
-  }
-  
+      "no-debugger":0,
+      "no-console":0,
+      "no-case-declarations": 0,
+      "react/display-name": 0
+      
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"]
+}

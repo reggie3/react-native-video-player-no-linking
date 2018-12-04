@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import PlaybackSlider from './PlaybackSlider';
 import PlaybackTimeStamp from './PlaybackTimeStamp';
@@ -14,7 +14,10 @@ const initialState = {
   playStatus: 'LOADING',
   videoSize: {},
   durationMillis: 0,
-  positionMillis: 0
+  positionMillis: 0,
+  viewDimensions: {
+    width: 0
+  }
 };
 class VideoPlayer extends Component {
   constructor(props) {
@@ -73,7 +76,12 @@ class VideoPlayer extends Component {
         });
       }
     } else {
-      console.log('Unhandled playback status in onPlaybackStatusUpdate: ', status)
+      if (this.props.onError) {
+        this.props.onError({
+          msg: 'Unhandled playback status in onPlaybackStatusUpdate: ',
+          status
+        });
+      }
     }
   };
 
@@ -85,74 +93,106 @@ class VideoPlayer extends Component {
     });
   };
 
-  render() {
-    const videoWidth = Dimensions.get('window').width;
-    const videoHeight = videoWidth * (9 / 16);
+  setLayoutInformation = ({
+    nativeEvent: { layout: { x, y, width, height } = {} } = {}
+  }) => {
+    if (!this.state.viewDimensions.width) {
+      this.setState({
+        viewDimensions: {
+          x,
+          y,
+          width,
+          height
+        }
+      });
+    }
+  };
 
+  render() {
     return (
       <View
         style={{
           ...StyleSheet.absoluteFillObject,
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          padding: 5
         }}
       >
-        <Video
-          ref={(component) => {
-            this.videoPlayer = component;
-          }}
-          style={{
-            height: videoHeight,
-            width: videoWidth,
-            elevation: 5,
-            shadowOffset: { width: 5, height: 3 },
-            shadowColor: 'black',
-            shadowOpacity: 0.5
-          }}
-          source={this.props.uri }
-          rate={this.props.rate}
-          volume={this.props.volume}
-          resizeMode={Video.RESIZE_MODE_CONTAIN}
-          shouldPlay={this.props.shouldPlay}
-          isLooping={this.props.isLooping}
-          onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
-          onReadyForDisplay={this.onReadyForDisplay}
-        />
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            margin: 5
+           width: '100%',
+            backgroundColor: 'red',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
+          onLayout={this.setLayoutInformation}
         >
-          {GetPlayButtonByStatus({
-            playStatus: this.state.playStatus,
-            onPlayPress: this.onPlayPress,
-            onPausePress: this.onPausePress
-          })}
-          {this.props.showPlaybackSlider ? (
-            <PlaybackSlider
-              maximumValue={this.state.durationMillis}
-              onValueChange={this.onSliderValueChange}
-              value={this.state.positionMillis}
-            />
-          ) : null}
-          {this.props.showTimeStamp ? (
-              <View style={{marginHorizontal: 3}}>
-            <PlaybackTimeStamp
-              playStatus={this.state.playStatus}
-              positionMillis={this.state.positionMillis}
-              durationMillis={this.state.durationMillis}
-              timeStampStyle={this.props.timeStampStyle}
-            />
-            </View>
-          ) : null}
-          {GetReplayButtonByStatus({
-            playStatus: this.playStatus,
-            onReplayPress: this.onReplayPress
-          })}
+          {this.state.viewDimensions.width ? (
+            <React.Fragment>
+              <Video
+                ref={(component) => {
+                  this.videoPlayer = component;
+                }}
+                style={{
+                  height: this.state.viewDimensions.width - 10 * (9 / 16),
+                  width: this.state.viewDimensions.width - 10,
+                  elevation: 5,
+                  shadowOffset: { width: 5, height: 3 },
+                  shadowColor: 'black',
+                  shadowOpacity: 0.5
+                }}
+                source={{
+                  uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
+                }} //{this.props.uri }
+                rate={this.props.rate}
+                volume={this.props.volume}
+                resizeMode={Video.RESIZE_MODE_CONTAIN}
+                shouldPlay={this.props.shouldPlay}
+                isLooping={this.props.isLooping}
+                onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
+                onReadyForDisplay={this.onReadyForDisplay}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  margin: 5
+                }}
+              >
+                {GetPlayButtonByStatus({
+                  playStatus: this.state.playStatus,
+                  onPlayPress: this.onPlayPress,
+                  onPausePress: this.onPausePress
+                })}
+                {this.props.showPlaybackSlider ? (
+                  <PlaybackSlider
+                    maximumValue={this.state.durationMillis}
+                    onValueChange={this.onSliderValueChange}
+                    value={this.state.positionMillis}
+                  />
+                ) : null}
+                {this.props.showTimeStamp ? (
+                  <View style={{ marginHorizontal: 3 }}>
+                    <PlaybackTimeStamp
+                      playStatus={this.state.playStatus}
+                      positionMillis={this.state.positionMillis}
+                      durationMillis={this.state.durationMillis}
+                      timeStampStyle={this.props.timeStampStyle}
+                    />
+                  </View>
+                ) : null}
+                {GetReplayButtonByStatus({
+                  playStatus: this.playStatus,
+                  onReplayPress: this.onReplayPress
+                })}
+              </View>
+            </React.Fragment>
+          ) : (
+            <ActivityIndicator size="large" color="green" />
+          )}
         </View>
       </View>
     );

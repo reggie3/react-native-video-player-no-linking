@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "react-native-video-player-no-linking",
-    "description": "This project is really great.",
+    "description": "A simple video player with a simple UI.",
     "slug": "react-native-video-player-no-linking",
     "privacy": "public",
-    "sdkVersion": "27.0.0",
+    "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",

@@ -10,14 +10,14 @@ const npmDeps = {
     "prop-types": "15.6.1",
     "react-native-blink-view": "0.0.6",
     "react-native-slider": "^0.11.0",
-    "react-native-ui-kitten": "^3.0.1",
+    "native-base": "^2.8.1",
 };
 
 // additional dependencies for expo app
 const expoDeps = {
-  "expo": "^27.0.0",
-  "react": "16.3.1",
-  "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz"
+  expo: '^31.0.0',
+  react: '16.5.0',
+  'react-native': `https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz`
 };
 
 // main for npm publishing

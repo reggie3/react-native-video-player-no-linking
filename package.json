@@ -1,0 +1,54 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "name": "react-native-video-player-no-linking",
+  "private": false,
+  "version": "0.0.11",
+  "description": "A simple react native video player component suitable for dropping into expo.io and other react native applications.  It contains no native platform specific code.",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "expo": "^31.0.0",
+    "native-base": "^2.8.1",
+    "prop-types": "15.6.1",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz",
+    "react-native-blink-view": "0.0.6",
+    "react-native-slider": "^0.11.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.3",
+    "babel-jest": "^22.4.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "gulp": "^4.0.0",
+    "gulp-bump": "^3.1.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-json-editor": "^2.4.1",
+    "gulp-run": "^1.7.1",
+    "regenerator-runtime": "^0.11.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reggie3/react-native-video-player-no-linking .git"
+  },
+  "keywords": [
+    "react-native",
+    "expo.io",
+    "video",
+    "player",
+    "javascript"
+  ],
+  "author": "Reginald Johnson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/reggie3/react-native-video-player-no-linking /issues"
+  },
+  "homepage": "https://github.com/reggie3/react-native-video-player-no-linking #readme"
+}
