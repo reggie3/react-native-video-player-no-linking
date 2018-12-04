@@ -42,8 +42,6 @@ gulp.task('forNPM', (done) => {
   done();
 });
 
-
-
 gulp.task('npm-publish', () => {
   return run('npm publish').exec();
 });

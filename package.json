@@ -2,7 +2,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "name": "react-native-video-player-no-linking",
   "private": false,
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "A simple react native video player component suitable for dropping into expo.io and other react native applications.  It contains no native platform specific code.",
   "dependencies": {
     "babel-cli": "^6.26.0",

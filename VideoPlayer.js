@@ -122,7 +122,6 @@ class VideoPlayer extends Component {
         <View
           style={{
            width: '100%',
-            backgroundColor: 'red',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
@@ -130,7 +129,9 @@ class VideoPlayer extends Component {
           onLayout={this.setLayoutInformation}
         >
           {this.state.viewDimensions.width ? (
-            <React.Fragment>
+            <View style ={{display: 'flex',
+            // backgroundColor: 'blue',
+            justifyContent: 'space-around'}}>
               <Video
                 ref={(component) => {
                   this.videoPlayer = component;
@@ -159,7 +160,8 @@ class VideoPlayer extends Component {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  margin: 5
+                  margin: 5,
+                  // backgroundColor: 'orange'
                 }}
               >
                 {GetPlayButtonByStatus({
@@ -189,7 +191,7 @@ class VideoPlayer extends Component {
                   onReplayPress: this.onReplayPress
                 })}
               </View>
-            </React.Fragment>
+            </View>
           ) : (
             <ActivityIndicator size="large" color="green" />
           )}
