@@ -144,7 +144,7 @@ class VideoPlayer extends Component {
                   shadowColor: 'black',
                   shadowOpacity: 0.5
                 }}
-                source={{uri: this.props.uri }}
+                source={ this.props.source}
                 rate={this.props.rate}
                 volume={this.props.volume}
                 resizeMode={Video.RESIZE_MODE_CONTAIN}

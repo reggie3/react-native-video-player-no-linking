@@ -2,7 +2,7 @@
   "main": "index.js",
   "name": "react-native-video-player-no-linking",
   "private": false,
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "A simple react native video player component suitable for dropping into expo.io and other react native applications.  It contains no native platform specific code.",
   "dependencies": {
     "prop-types": "15.6.1",

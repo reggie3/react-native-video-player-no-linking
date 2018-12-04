@@ -34,7 +34,7 @@ export default class App extends React.Component {
           }}
         >
           <VideoPlayer
-            uri={URI}
+            uri={{uri: URI}}
             rate={1.0}
             volume={1.0}
             /* resizeMode={RESIZE_MODE_COVER} */
