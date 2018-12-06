@@ -11,6 +11,7 @@ const npmDeps = {
     "react-native-blink-view": "0.0.6",
     "react-native-slider": "^0.11.0",
     "native-base": "^2.8.1",
+    "react-native-animatable": "^1.3.0",
 };
 
 // additional dependencies for expo app
