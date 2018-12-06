@@ -14,6 +14,7 @@ import {
 } from "./VideoPlayerUI";
 import { Video } from "expo";
 import { Button, Icon } from "native-base";
+import * as Animatable from 'react-native-animatable';
 
 const initialState = {
   playStatus: "LOADING",
@@ -313,15 +314,17 @@ class VideoPlayer extends Component {
             }}
           >
             {this.maybeRenderVideo()}
-            <View
+            <Animatable.View
               style={{
                 ...StyleSheet.absoluteFillObject,
                 display: "flex"
               }}
+              animation={
+                this.state.showControls?"fadeIn":"fadeOut"} useNativeDriver
             >
               {this.maybeRenderControls()}
               {this.maybeRenderPlaybackSlider()}
-            </View>
+            </Animatable.View>
           </View>
         ) : (
           <View
