@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
 import PlaybackSlider from "./PlaybackSlider";
 import PlaybackTimeStamp from "./PlaybackTimeStamp";
@@ -17,7 +17,8 @@ const initialState = {
   positionMillis: 0,
   viewDimensions: {
     width: 0
-  }
+  },
+  showControls: true
 };
 class VideoPlayer extends Component {
   constructor(props) {
@@ -29,78 +30,34 @@ class VideoPlayer extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (!prevState.viewDimensions.isSet && this.state.viewDimensions.isSet) {
-      var maxWidth = this.state.viewDimensions.width; // Max width for the image
-      var maxHeight = this.state.viewDimensions.height; // Max height for the image
-      var ratio = 0; // Used for aspect ratio
-      var width = this.props.videoWidth; // Current image width
-      var height = this.props.videoHeight; // Current image height
-      debugger;
+      this.calculateAspectRatioFit(
+        this.props.videoWidth,
+        this.props.videoHeight,
+        this.state.viewDimensions.width,
+        this.state.viewDimensions.height
+      );
+    }
+  };
 
-      if (width > maxWidth || height > maxHeight) {
-        this.shrinkVideo(maxWidth, maxHeight, ratio, width, height);
-      } else if (width < maxWidth && height < maxHeight) {
-        this.enlargeVideo(maxWidth, maxHeight, ratio, width, height);
+  calculateAspectRatioFit = (srcWidth, srcHeight, maxWidth, maxHeight) => {
+    console.log({ srcWidth }, { srcHeight }, { maxWidth }, { maxHeight });
+    var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+
+    this.setState(
+      {
+        calculatedVideoWidth: srcWidth * ratio,
+        calculatedVideoHeight: srcHeight * ratio
+      },
+      () => {
+        console.log(
+          "Picture: ",
+          this.state.calculatedVideoWidth,
+          ", ",
+          this.state.calculatedVideoHeight
+        );
       }
-    }
+    );
   };
-
-  shrinkVideo = (maxWidth, maxHeight, ratio, width, height) => {
-    debugger
-    // Check if the current width is larger than the max
-    if (width > maxWidth) {
-      ratio = maxWidth / width; // get ratio for scaling image
-
-      this.setState({
-        calculatedVideoWidth: maxWidth,
-        calculatedVideoHeight: height * ratio
-      });
-
-      height = height * ratio; // Reset height to match scaled image
-      width = width * ratio; // Reset width to match scaled image
-    }
-
-    // Check if current height is larger than max
-    if (height > maxHeight) {
-      ratio = maxHeight / height; // get ratio for scaling image
-
-      this.setState({
-        calculatedVideoHeight: maxHeight,
-        calculatedVideoWidth: width * ratio
-      });
-
-      width = width * ratio; // Reset width to match scaled image
-      height = height * ratio; // Reset height to match scaled image
-    }
-  };
-
-  enlargeVideo = (maxWidth, maxHeight, ratio, width, height) => {
-    debugger;
-    // Check if the current width is larger than the max
-    if (width < maxWidth) {
-      ratio = maxWidth / width; // get ratio for scaling image
-
-      this.setState({
-        calculatedVideoWidth: maxWidth,
-        calculatedVideoHeight: height * ratio
-      });
-
-      height = height * ratio; // Reset height to match scaled image
-      width = width * ratio; // Reset width to match scaled image
-    }
-
-    // Check if current height is larger than max
-    if (height < maxHeight) {
-      ratio = maxHeight / height; // get ratio for scaling image
-
-      this.setState({
-        calculatedVideoHeight: maxHeight,
-        calculatedVideoWidth: width * ratio
-      });
-
-      width = width * ratio; // Reset width to match scaled image
-      height = height * ratio; // Reset height to match scaled image
-    }
-  };   
 
   componentWillUnmount = () => {
     this.videoPlayer.unloadAsync();
@@ -120,6 +77,7 @@ class VideoPlayer extends Component {
   };
 
   onPlayPress = () => {
+    this.setState({ showControls: false });
     this.videoPlayer.playAsync();
   };
 
@@ -141,13 +99,15 @@ class VideoPlayer extends Component {
       this.setState({
         playStatus: "STOPPED",
         playableDurationMillis: status.playableDurationMillis,
-        durationMillis: status.durationMillis
+        durationMillis: status.durationMillis,
+        showControls: true
       });
       if (status.isPlaying) {
         this.setState({
           playStatus: "PLAYING",
           positionMillis: status.positionMillis,
-          playableDurationMillis: status.playableDurationMillis
+          playableDurationMillis: status.playableDurationMillis,
+          showControls: false
         });
       }
     } else {
@@ -172,78 +132,108 @@ class VideoPlayer extends Component {
     nativeEvent: { layout: { x, y, width, height } = {} } = {}
   }) => {
     if (!this.state.viewDimensions.width) {
-      this.setState({
-        viewDimensions: {
-          x,
-          y,
-          width,
-          height,
-          isSet: true
+      this.setState(
+        {
+          viewDimensions: {
+            x,
+            y,
+            width,
+            height,
+            isSet: true
+          }
+        },
+        () => {
+          console.log(
+            "View: ",
+            this.state.viewDimensions.width,
+            ", ",
+            this.state.viewDimensions.width
+          );
         }
-      });
+      );
     }
   };
 
   maybeRenderVideo = () => {
     if (this.state.calculatedVideoHeight) {
       return (
-        <Video
-          ref={component => {
-            this.videoPlayer = component;
-          }}
+        <View
           style={{
-            /* height: this.state.viewDimensions.width - 10 * (9 / 16),
-          width: this.state.viewDimensions.width - 10, */
-            height: this.state.calculatedVideoHeight,
-            width: this.state.calculatedVideoWidth,
-            elevation: 5,
-            shadowOffset: { width: 5, height: 3 },
-            shadowColor: "black",
-            shadowOpacity: 0.5,
-            zIndex: 1
+            zIndex: 0
           }}
-          source={this.props.source}
-          rate={this.props.rate}
-          volume={this.props.volume}
-          resizeMode={Video.RESIZE_MODE_CONTAIN}
-          shouldPlay={this.props.shouldPlay}
-          isLooping={this.props.isLooping}
-          onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
-          onReadyForDisplay={this.onReadyForDisplay}
-        />
+        >
+          <Video
+            ref={component => {
+              this.videoPlayer = component;
+            }}
+            style={{
+              height: this.state.calculatedVideoHeight,
+              width: this.state.calculatedVideoWidth,
+              elevation: 5,
+              shadowOffset: { width: 5, height: 3 },
+              shadowColor: "black",
+              shadowOpacity: 0.5
+            }}
+            source={this.props.source}
+            rate={this.props.rate}
+            volume={this.props.volume}
+            resizeMode={Video.RESIZE_MODE_CONTAIN}
+            shouldPlay={this.props.shouldPlay}
+            isLooping={this.props.isLooping}
+            onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
+            onReadyForDisplay={this.onReadyForDisplay}
+          />
+        </View>
       );
     } else {
       return <ActivityIndicator size="large" />;
     }
   };
 
+  onControlLayerPressed = () => {
+    this.setState({ showControls: !this.state.showControls });
+  };
+
   maybeRenderControls = () => {
     return (
-      <View
+      <TouchableOpacity
         style={{
-          flexDirection: "row",
+          // backgroundColor: "red",
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
           alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: "orange",
-          position: "absolute",
-          zIndex: 100
+          zIndex: 1
         }}
+        onPress={this.onControlLayerPressed}
       >
-        {GetPlayButtonByStatus({
-          playStatus: this.state.playStatus,
-          onPlayPress: this.onPlayPress,
-          onPausePress: this.onPausePress
-        })}
-        {GetReplayButtonByStatus({
-          playStatus: this.playStatus,
-          onReplayPress: this.onReplayPress
-        })}
-      </View>
+        {this.state.showControls ? (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              position: "absolute",
+              width: 150
+            }}
+          >
+            {GetPlayButtonByStatus({
+              playStatus: this.state.playStatus,
+              onPlayPress: this.onPlayPress,
+              onPausePress: this.onPausePress
+            })}
+            {GetReplayButtonByStatus({
+              playStatus: this.playStatus,
+              onReplayPress: this.onReplayPress
+            })}
+          </View>
+        ) : null}
+      </TouchableOpacity>
     );
   };
 
   maybeRenderPlaybackSlider = () => {
-    if (this.props.showPlaybackSlider) {
+    if (this.props.showPlaybackSlider && this.state.showControls) {
       return (
         <View
           style={{
@@ -254,7 +244,7 @@ class VideoPlayer extends Component {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor: "orange"
+            zIndex: 1
           }}
         >
           <PlaybackSlider
@@ -284,25 +274,27 @@ class VideoPlayer extends Component {
       <View
         style={{
           ...StyleSheet.absoluteFillObject,
-          //display: "flex",
-          //justifyContent: "center",
-          //alignItems: "center",
-          //flex: 1,
-          backgroundColor: 'pink'
+          backgroundColor: "pink"
         }}
         onLayout={this.setLayoutInformation}
       >
         {this.state.viewDimensions.width ? (
           <View
             style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: "gray",
               display: "flex",
-              flex:1,
-              backgroundColor: 'gray',
-              justifyContent: "space-around"
+              justifyContent: "center",
+              alignItems: "center"
             }}
           >
             {this.maybeRenderVideo()}
-            <View style={{ ...StyleSheet.absoluteFillObject, zIndex: 1000, backgroundColor: 'blue' }}>
+            <View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                display: "flex"
+              }}
+            >
               {this.maybeRenderControls()}
               {this.maybeRenderPlaybackSlider()}
             </View>
@@ -326,8 +318,8 @@ VideoPlayer.propTypes = {
 
 VideoPlayer.defaultProps = {
   timeStampStyle: {
-    color: "#222222",
-    fontSize: 20
+    color: "#ffffff",
+    fontSize: 16
   },
   showTimeStamp: true,
   showPlaybackSlider: true,

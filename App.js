@@ -4,9 +4,9 @@ import { Text } from "native-base";
 import VideoPlayer from "./VideoPlayer";
 import { Constants } from "expo";
 
-const URI = "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4";
-const videoWidth = 640;
-const videoHeight = 320;
+const URI = "https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4";
+const videoWidth = 720;
+const videoHeight = 1280;
 const durationMillis = 27000;
 
 export default class App extends React.Component {
@@ -47,14 +47,14 @@ export default class App extends React.Component {
             isLooping={this.props.isLooping}
             onPlayComplete={this.onPlayComplete}
             timeStampStyle={{
-              color: "#000000",
-              fontSize: 20
+              color: "#ffffff",
+              fontSize: 16
             }}
             onError={error => {
               console.log({ error });
             }}
-            videoWidth={640}
-            videoHeight={320}
+            videoWidth={videoWidth}
+            videoHeight={videoHeight}
             durationMillis={27000}
           />
         </View>
