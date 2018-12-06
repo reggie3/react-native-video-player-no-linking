@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+  View
+} from "react-native";
 import PropTypes from "prop-types";
 import PlaybackSlider from "./PlaybackSlider";
 import PlaybackTimeStamp from "./PlaybackTimeStamp";
@@ -8,7 +13,7 @@ import {
   GetReplayButtonByStatus
 } from "./VideoPlayerUI";
 import { Video } from "expo";
-import { View } from "react-native";
+import { Button, Icon } from "native-base";
 
 const initialState = {
   playStatus: "LOADING",
@@ -177,8 +182,8 @@ class VideoPlayer extends Component {
             source={this.props.source}
             rate={this.props.rate}
             volume={this.props.volume}
-            resizeMode={Video.RESIZE_MODE_CONTAIN}
-            shouldPlay={this.props.shouldPlay}
+/*             resizeMode={Video.RESIZE_MODE_CONTAIN}
+ */            shouldPlay={this.props.shouldPlay}
             isLooping={this.props.isLooping}
             onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
             onReadyForDisplay={this.onReadyForDisplay}
@@ -232,6 +237,10 @@ class VideoPlayer extends Component {
     );
   };
 
+  showFullScreen=()=>{
+
+  }
+  
   maybeRenderPlaybackSlider = () => {
     if (this.props.showPlaybackSlider && this.state.showControls) {
       return (
@@ -241,14 +250,17 @@ class VideoPlayer extends Component {
             bottom: 0,
             left: 0,
             right: 0,
+            display: "flex",
             flexDirection: "row",
             alignItems: "center",
+            alignContent: "center",
             justifyContent: "space-between",
-            zIndex: 1
+            zIndex: 1,
+            backgroundColor: "rgba(150,150,150,.35)"
           }}
         >
           <PlaybackSlider
-            maximumValue={this.state.durationMillis}
+            maximumValue={this.state.playableDurationMillis}
             onValueChange={this.onSliderValueChange}
             value={this.state.positionMillis}
           />
@@ -257,11 +269,23 @@ class VideoPlayer extends Component {
               <PlaybackTimeStamp
                 playStatus={this.state.playStatus}
                 positionMillis={this.state.positionMillis}
-                durationMillis={this.state.durationMillis}
+                durationMillis={this.state.playableDurationMillis}
                 timeStampStyle={this.props.timeStampStyle}
               />
             </View>
           ) : null}
+          {/* The following view is required to center the button vertically */}
+          <View >
+          <Button transparent small onPress={()=>{
+                this.videoPlayer.presentFullscreenPlayer();
+          }}>
+            <Icon
+              type="FontAwesome"
+              name="arrows-alt"
+              style={{ color: "white", fontSize: 20, height: '100%' }}
+            />
+          </Button>
+          </View>
         </View>
       );
     } else {
@@ -300,7 +324,17 @@ class VideoPlayer extends Component {
             </View>
           </View>
         ) : (
-          <ActivityIndicator size="large" color="green" />
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: "gray",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <ActivityIndicator size="large" color="green" />
+          </View>
         )}
       </View>
     );

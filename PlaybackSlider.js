@@ -1,14 +1,12 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import Slider from 'react-native-slider';
+import { View, StyleSheet, Slider } from 'react-native';
+// import Slider from 'react-native-slider';
 
 const PlaybackSlider = (props) => {
   return (
     <View style={sliderStyles.container}>
       <Slider
-        trackStyle={customStyles4.track}
-        thumbStyle={customStyles4.thumb}
-        minimumTrackTintColor='#00cc00'
+
         minimimValue={0}
         maximumValue={props.maximumValue}
         value={props.value}
