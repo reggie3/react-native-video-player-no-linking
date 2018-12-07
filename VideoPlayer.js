@@ -1,23 +1,23 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
   View
-} from "react-native";
-import PropTypes from "prop-types";
-import PlaybackSlider from "./PlaybackSlider";
-import PlaybackTimeStamp from "./PlaybackTimeStamp";
+} from 'react-native';
+import PropTypes from 'prop-types';
+import PlaybackSlider from './PlaybackSlider';
+import PlaybackTimeStamp from './PlaybackTimeStamp';
 import {
   GetPlayButtonByStatus,
   GetReplayButtonByStatus
-} from "./VideoPlayerUI";
-import { Video } from "expo";
-import { Button, Icon } from "native-base";
+} from './VideoPlayerUI';
+import { Video } from 'expo';
+import { Button, Icon } from 'native-base';
 import * as Animatable from 'react-native-animatable';
 
 const initialState = {
-  playStatus: "LOADING",
+  playStatus: 'LOADING',
   videoSize: {},
   durationMillis: 0,
   positionMillis: 0,
@@ -56,9 +56,9 @@ class VideoPlayer extends Component {
       },
       () => {
         console.log(
-          "Picture: ",
+          'Picture: ',
           this.state.calculatedVideoWidth,
-          ", ",
+          ', ',
           this.state.calculatedVideoHeight
         );
       }
@@ -69,9 +69,9 @@ class VideoPlayer extends Component {
     this.videoPlayer.unloadAsync();
   };
 
-  getResizeMode = mode => {
+  getResizeMode = (mode) => {
     switch (mode) {
-      case "COVER":
+      case 'COVER':
         return Video.RESIZE_MODE_COVER;
       default:
         return Video.RESIZE_MODE_COVER;
@@ -91,26 +91,26 @@ class VideoPlayer extends Component {
     this.videoPlayer.pauseAsync();
   };
 
-  onSliderValueChange = value => {
+  onSliderValueChange = (value) => {
     this.videoPlayer.setPositionAsync(value);
   };
 
-  onPlaybackStatusUpdate = status => {
+  onPlaybackStatusUpdate = (status) => {
     if (status.isBuffering) {
       this.setState({
-        playStatus: "BUFFERING",
+        playStatus: 'BUFFERING',
         playableDurationMillis: status.playableDurationMillis
       });
     } else if (status.isLoaded) {
       this.setState({
-        playStatus: "STOPPED",
+        playStatus: 'STOPPED',
         playableDurationMillis: status.playableDurationMillis,
         durationMillis: status.durationMillis,
         showControls: true
       });
       if (status.isPlaying) {
         this.setState({
-          playStatus: "PLAYING",
+          playStatus: 'PLAYING',
           positionMillis: status.positionMillis,
           playableDurationMillis: status.playableDurationMillis,
           showControls: false
@@ -119,7 +119,7 @@ class VideoPlayer extends Component {
     } else {
       if (this.props.onError) {
         this.props.onError({
-          msg: "Unhandled playback status in onPlaybackStatusUpdate: ",
+          msg: 'Unhandled playback status in onPlaybackStatusUpdate: ',
           status
         });
       }
@@ -150,9 +150,9 @@ class VideoPlayer extends Component {
         },
         () => {
           console.log(
-            "View: ",
+            'View: ',
             this.state.viewDimensions.width,
-            ", ",
+            ', ',
             this.state.viewDimensions.width
           );
         }
@@ -169,7 +169,7 @@ class VideoPlayer extends Component {
           }}
         >
           <Video
-            ref={component => {
+            ref={(component) => {
               this.videoPlayer = component;
             }}
             style={{
@@ -177,14 +177,14 @@ class VideoPlayer extends Component {
               width: this.state.calculatedVideoWidth,
               elevation: 5,
               shadowOffset: { width: 5, height: 3 },
-              shadowColor: "black",
+              shadowColor: 'black',
               shadowOpacity: 0.5
             }}
             source={this.props.source}
             rate={this.props.rate}
             volume={this.props.volume}
-/*             resizeMode={Video.RESIZE_MODE_CONTAIN}
- */            shouldPlay={this.props.shouldPlay}
+            /* resizeMode={Video.RESIZE_MODE_CONTAIN}*/ 
+            shouldPlay={this.props.shouldPlay}
             isLooping={this.props.isLooping}
             onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
             onReadyForDisplay={this.onReadyForDisplay}
@@ -206,9 +206,9 @@ class VideoPlayer extends Component {
         style={{
           // backgroundColor: "red",
           flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           zIndex: 1
         }}
         onPress={this.onControlLayerPressed}
@@ -216,10 +216,10 @@ class VideoPlayer extends Component {
         {this.state.showControls ? (
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              position: "absolute",
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              position: 'absolute',
               width: 150
             }}
           >
@@ -238,26 +238,24 @@ class VideoPlayer extends Component {
     );
   };
 
-  showFullScreen=()=>{
+  showFullScreen = () => {};
 
-  }
-  
   maybeRenderPlaybackSlider = () => {
     if (this.props.showPlaybackSlider && this.state.showControls) {
       return (
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             bottom: 0,
             left: 0,
             right: 0,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            alignContent: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            alignContent: 'center',
+            justifyContent: 'space-between',
             zIndex: 1,
-            backgroundColor: "rgba(150,150,150,.35)"
+            backgroundColor: 'rgba(150,150,150,.35)'
           }}
         >
           <PlaybackSlider
@@ -276,16 +274,20 @@ class VideoPlayer extends Component {
             </View>
           ) : null}
           {/* The following view is required to center the button vertically */}
-          <View >
-          <Button transparent small onPress={()=>{
+          <View>
+            <Button
+              transparent
+              small
+              onPress={() => {
                 this.videoPlayer.presentFullscreenPlayer();
-          }}>
-            <Icon
-              type="FontAwesome"
-              name="arrows-alt"
-              style={{ color: "white", fontSize: 20, height: '100%' }}
-            />
-          </Button>
+              }}
+            >
+              <Icon
+                type="FontAwesome"
+                name="arrows-alt"
+                style={{ color: 'white', fontSize: 20, height: '100%' }}
+              />
+            </Button>
           </View>
         </View>
       );
@@ -299,7 +301,7 @@ class VideoPlayer extends Component {
       <View
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: "pink"
+          backgroundColor: 'pink'
         }}
         onLayout={this.setLayoutInformation}
       >
@@ -307,20 +309,20 @@ class VideoPlayer extends Component {
           <View
             style={{
               ...StyleSheet.absoluteFillObject,
-              backgroundColor: "gray",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
+              backgroundColor: 'gray',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           >
             {this.maybeRenderVideo()}
             <Animatable.View
               style={{
                 ...StyleSheet.absoluteFillObject,
-                display: "flex"
+                display: 'flex'
               }}
-              animation={
-                this.state.showControls?"fadeIn":"fadeOut"} useNativeDriver
+              animation={this.state.showControls ? 'fadeIn' : 'fadeOut'}
+              useNativeDriver
             >
               {this.maybeRenderControls()}
               {this.maybeRenderPlaybackSlider()}
@@ -330,10 +332,10 @@ class VideoPlayer extends Component {
           <View
             style={{
               ...StyleSheet.absoluteFillObject,
-              backgroundColor: "gray",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
+              backgroundColor: 'gray',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           >
             <ActivityIndicator size="large" color="green" />
@@ -355,7 +357,7 @@ VideoPlayer.propTypes = {
 
 VideoPlayer.defaultProps = {
   timeStampStyle: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 16
   },
   showTimeStamp: true,
