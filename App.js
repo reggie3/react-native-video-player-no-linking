@@ -5,9 +5,8 @@ import VideoPlayer from "./VideoPlayer";
 import { Constants } from "expo";
 
 const URI = "https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4";
-const videoWidth = 720;
-const videoHeight = 1280;
-const durationMillis = 27000;
+/* const videoWidth = 720;
+const videoHeight = 1280; */
 
 export default class App extends React.Component {
   onPlayComplete = () => {
@@ -53,9 +52,9 @@ export default class App extends React.Component {
             onError={error => {
               console.log({ error });
             }}
-            videoWidth={videoWidth}
-            videoHeight={videoHeight}
             durationMillis={27000}
+            showTimeStamp={true}
+
           />
         </View>
         <View style={{ flex: 1, backgroundColor: "green" }}>

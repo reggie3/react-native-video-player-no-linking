@@ -1,15 +1,18 @@
 {
-  "main": "index.js",
+  "main": "node_modules/expo/AppEntry.js",
   "name": "react-native-video-player-no-linking",
   "private": false,
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A simple react native video player component suitable for dropping into expo.io and other react native applications.  It contains no native platform specific code.",
   "dependencies": {
     "prop-types": "15.6.1",
     "react-native-blink-view": "0.0.6",
     "react-native-slider": "^0.11.0",
     "native-base": "^2.8.1",
-    "react-native-animatable": "^1.3.0"
+    "react-native-animatable": "^1.3.0",
+    "expo": "^31.0.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
