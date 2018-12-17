@@ -19,7 +19,7 @@ class PlaybackStatusOverlay extends React.Component {
           alignItems: 'center',
           alignContent: 'center',
           justifyContent: 'space-between',
-          zIndex: 1,
+          zIndex: 2,
           backgroundColor: 'rgba(150,150,150,.35)'
         }}
       >
@@ -43,7 +43,7 @@ class PlaybackStatusOverlay extends React.Component {
           <Button transparent small onPress={this.props.toggleFullScreenVideo}>
             <Icon
               type="FontAwesome"
-              name="arrows-alt"
+              name={this.props.isPortrait ?"arrows-alt" : 'compress'}
               style={{ color: 'white', fontSize: 20, height: '100%' }}
             />
           </Button>

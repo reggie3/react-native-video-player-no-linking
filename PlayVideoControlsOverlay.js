@@ -12,24 +12,31 @@ import {
 import * as Animatable from 'react-native-animatable';
 
 /***************************************
- * 
+ *
  * A transparent touchable view that contains the video playback controls
  * The view will display the controls when touched, and hide them other wise
  */
 class PlayVideoControlsOverlay extends React.Component {
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.showControls !== prevProps.showControls) {
+      console.log(
+        'showControls changed: this.props.showControls = ',
+        this.props.showControls, this.props.source
+      );
+    }
+  };
   render() {
     return (
-      <Animatable.View
+      <View
         style={{
           ...StyleSheet.absoluteFillObject,
-          display: 'flex'
+          display: 'flex',
+          bottom: 30,   // avoid the playback overlay that displays the status bar
         }}
-        animation={this.props.showControls ? 'fadeIn' : 'fadeOut'}
-        useNativeDriver
       >
         <TouchableOpacity
           style={{
-            backgroundColor: 'rgba(100,0,0,0)',
+            backgroundColor: this.props.backgroundColor || 'rgba(100,0,0,0)',
             flex: 1,
             display: 'flex',
             justifyContent: 'center',
@@ -60,9 +67,26 @@ class PlayVideoControlsOverlay extends React.Component {
             </View>
           ) : null}
         </TouchableOpacity>
-      </Animatable.View>
+      </View>
     );
   }
 }
 
 export default PlayVideoControlsOverlay;
+
+/****************
+ * 
+ * 
+ * 
+ * <Animatable.View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          display: 'flex'
+        }}
+        animation={this.props.showControls ? 'fadeIn' : 'fadeOut'}
+        useNativeDriver
+      > 
+      </Animatable.View> 
+
+
+ */

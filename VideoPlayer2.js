@@ -56,7 +56,7 @@ var SEEK_STATES = {
 // Don't show the ActivityIndicator for very short periods of buffering
 const BUFFERING_SHOW_DELAY = 200;
 
-export default class VideoPlayer extends React.Component {
+export default class VideoPlayer2 extends React.Component {
   static propTypes = {
     /**
      * How long should the fadeIn animation for the controls run? (in milliseconds)
@@ -199,7 +199,8 @@ export default class VideoPlayer extends React.Component {
         interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
         playsInSilentModeIOS: true,
         shouldDuckAndroid: true,
-        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
+        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+        playThroughEarpieceAndroid : false
       });
     } catch (e) {
       this.props.errorCallback({
@@ -277,9 +278,10 @@ export default class VideoPlayer extends React.Component {
     }
   }
 
-  _playbackCallback(playbackStatus) {
+  onPlaybackStatusUpdate=(playbackStatus)=> {
     try {
       this.props.playbackCallback(playbackStatus);
+      
     } catch (e) {
       console.error('Uncaught error when calling props.playbackCallback', e);
     }
@@ -545,6 +547,7 @@ export default class VideoPlayer extends React.Component {
     const FullscreenExitIcon = this.props.fullscreenExitIcon;
     const ReplayIcon = this.props.replayIcon;
 
+    
     // Do not let the user override `ref`, `callback`, and `style`
     const {
       ref,
@@ -553,7 +556,7 @@ export default class VideoPlayer extends React.Component {
       source,
       ...otherVideoProps
     } = this.props.videoProps;
-
+    console.log({source});
     // TODO: Best way to throw required property missing error
     if (!source) {
       console.error('`source` is a required property');
@@ -633,10 +636,11 @@ export default class VideoPlayer extends React.Component {
           <Video
             source={source}
             ref={(component) => {
+           
               this._playbackInstance = component;
               ref && ref(component);
             }}
-            onPlaybackStatusUpdate={this._playbackCallback.bind(this)}
+            onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
             style={{
               width: videoWidth,
               height: videoHeight
@@ -650,7 +654,7 @@ export default class VideoPlayer extends React.Component {
               BUFFERING_SHOW_DELAY) ||
             this.state.playbackState == PLAYBACK_STATES.LOADING) && (
             <CenteredView>
-              <ActivityIndicator color={'green'} size={'large'} />
+              <ActivityIndicator />
             </CenteredView>
           )}
 
@@ -776,4 +780,4 @@ export default class VideoPlayer extends React.Component {
   }
 }
 
-reactMixin(VideoPlayer.prototype, TimerMixin);
+reactMixin(VideoPlayer2.prototype, TimerMixin);

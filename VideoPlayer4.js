@@ -1,10 +1,10 @@
 import React from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import { Video } from 'expo';
+import { ActivityIndicator, View, StyleSheet, Dimensions } from 'react-native';
+import { Video, Audio } from 'expo';
 import PlaybackStatusOverlay from './PlaybackStatusOverlay';
 import PlayVideoControlsOverlay from './PlayVideoControlsOverlay';
 
-class SmallInViewPlayer extends React.Component {
+class VideoPlayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,42 +22,41 @@ class SmallInViewPlayer extends React.Component {
     this.videoPlayer = null;
   }
 
+  async componentDidMount() {
+    /* this._setupNetInfoListener();
+
+    if (this.state.controlsState === CONTROL_STATES.SHOWN) {
+      this._resetControlsTimer();
+    } */
+
+    // Set audio mode to play even in silent mode (like the YouTube app)
+    try {
+      Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+        playThroughEarpieceAndroid : false
+      });
+    } catch (e) {
+      this.props.errorCallback({
+        type: 'NON_FATAL',
+        message: 'setAudioModeAsync error',
+        obj: e
+      });
+    }
+  }
+
+
   componentWillUnmount = () => {
     this.videoPlayer.unloadAsync();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    // this player is being displayed
-    if (!prevProps.useFullScreenPlayer && this.props.useFullScreenPlayer) {
-      // since we are leaving this small player we need to do the following:
-      // stop this player's playback
-      this.videoPlayer.pauseAsync();
-    }
+   
 
-    // this player is being hidden
-    if (prevProps.useFullScreenPlayer && !this.props.useFullScreenPlayer) {
-      // since we are coming to this small player
-      // 1. check to see if there is a global postion stored
-      // indicating where we should start playing the video from.
-      // If there is, then move to that position in the video
-      if (this.props.globalPositionMillis) {
-        this.videoPlayer.setPositionAsync(this.props.globalPositionMillis);
-      }
-      // 2. check to see if there is a status stored, and if
-      // there is, then assume that status
-      if (this.props.globalPlayStatus) {
-        console.log({ globalPlayStatus: this.props.globalPlayStatus });
-      }
 
-      // 3. Play or pause the video based on what the user was doing
-      // when they left the other player
-
-            // FIXME: can't actually play until the video player has been loaded
-
-      if (this.props.globalPlayStatus === 'PLAYING') {
-        // this.videoPlayer.playAsync();
-      }
-    }
 
     if (this.state.naturalSize && !prevState.naturalSize) {
       console.log('calling calculateAspectRatioFit');
@@ -73,10 +72,10 @@ class SmallInViewPlayer extends React.Component {
     }
 
     if (prevState.positionMillis !== this.state.positionMillis) {
-      this.props.updateGlobalPositionMillis(this.state.positionMillis);
+      // this.props.updateGlobalPositionMillis(this.state.positionMillis);
     }
     if (prevState.playStatus !== this.state.playStatus) {
-      this.props.updateGlobalPlayStatus(this.state.playStatus);
+      // this.props.updateGlobalPlayStatus(this.state.playStatus);
     }
   };
 
@@ -130,7 +129,7 @@ class SmallInViewPlayer extends React.Component {
 
   // toggle control visiblity when they are pressed
   onControlLayerPressed = () => {
-    console.log('SmallInViewPlayer onControlLayerPressed');
+    console.log('VideoPlayer onControlLayerPressed');
 
     this.setState({ showControls: !this.state.showControls });
   };
@@ -186,7 +185,9 @@ class SmallInViewPlayer extends React.Component {
   };
 
   toggleFullScreenVideo = () => {
-    this.props.toggleFullScreenVideo();
+    this.props.isPortrait
+    ? this.props.switchToLandscape()
+    : this.props.switchToPortrait();
   };
 
   onReadyForDisplay = ({ naturalSize, status }) => {
@@ -200,6 +201,10 @@ class SmallInViewPlayer extends React.Component {
   };
 
   render() {
+    const videoWidth = Dimensions.get('window').width;
+    const videoHeight = videoWidth * (9 / 16);
+    const centeredContentWidth = 60;
+
     return (
       <React.Fragment>
         <View
@@ -220,17 +225,18 @@ class SmallInViewPlayer extends React.Component {
             }}
             style={{
               flex: 1,
-              height: this.state.calculatedVideoHeight,
-              width: this.state.calculatedVideoWidth,
+              width: videoWidth,
+              height: videoHeight,
               elevation: 5,
               shadowOffset: { width: 5, height: 3 },
               shadowColor: 'black',
-              shadowOpacity: 0.5
+              shadowOpacity: 0.5,
+              backgroundColor: 'black'
             }}
-            source={this.props.source}
+            source={this.props.videoProps.source}
             rate={this.props.rate}
             volume={this.props.volume}
-            resizeMode={Video.RESIZE_MODE_COVER}
+            resizeMode={Video.RESIZE_MODE_CONTAIN}
             shouldPlay={this.props.shouldPlay}
             isLooping={this.props.isLooping}
             onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
@@ -268,10 +274,11 @@ class SmallInViewPlayer extends React.Component {
           timeStampStyle={this.props.timeStampStyle}
           toggleFullScreenVideo={this.toggleFullScreenVideo}
           showTimeStamp={this.props.showTimeStamp}
+          isPortrait={this.props.isPortrait}
         />
       </React.Fragment>
     );
   }
 }
 
-export default SmallInViewPlayer;
+export default VideoPlayer;

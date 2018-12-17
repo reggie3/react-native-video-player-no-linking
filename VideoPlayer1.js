@@ -77,7 +77,8 @@ class VideoPlayer extends Component {
             updateGlobalPositionMillis={this.updateGlobalPositionMillis}
             updateGlobalPlayStatus={this.updateGlobalPlayStatus}
             timeStampStyle={this.props.timeStampStyle}
-
+            globalPositionMillis={this.state.globalPositionMillis}
+            globalPlayStatus={this.state.globalPlayStatus}
           />
           <SmallInViewPlayer
             useFullScreenPlayer={!this.state.useFullScreenPlayer}
@@ -101,6 +102,8 @@ class VideoPlayer extends Component {
             onReadyCallback={this.smallPlayerReadyCallback}
             updateGlobalPositionMillis={this.updateGlobalPositionMillis}
             updateGlobalPlayStatus={this.updateGlobalPlayStatus}
+            globalPositionMillis={this.state.globalPositionMillis}
+            globalPlayStatus={this.state.globalPlayStatus}
           />
         </React.Fragment>
       );
