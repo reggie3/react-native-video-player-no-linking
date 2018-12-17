@@ -7,7 +7,7 @@ const run = require('gulp-run');
 
 // dependencies for npm publishing
 const npmDeps = {
-    "prop-types": "15.6.1",
+    "prop-types": "15.6.2",
     "react-native-blink-view": "0.0.6",
     "react-native-slider": "^0.11.0",
     "native-base": "^2.8.1",

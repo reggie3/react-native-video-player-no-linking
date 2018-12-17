@@ -6,7 +6,6 @@ import { Button, Icon } from 'native-base';
 
 class PlaybackStatusOverlay extends React.Component {
   render() {
-   
     return (
       <View
         style={{
@@ -43,7 +42,7 @@ class PlaybackStatusOverlay extends React.Component {
           <Button transparent small onPress={this.props.toggleFullScreenVideo}>
             <Icon
               type="FontAwesome"
-              name={this.props.isPortrait ?"arrows-alt" : 'compress'}
+              name={this.props.isFullScreen ? 'compress' : 'arrows-alt'}
               style={{ color: 'white', fontSize: 20, height: '100%' }}
             />
           </Button>

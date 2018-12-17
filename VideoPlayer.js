@@ -1,8 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, View, StyleSheet, Dimensions } from 'react-native';
-import { Video, Audio } from 'expo';
+import { Video, Audio, ScreenOrientation } from 'expo';
 import PlaybackStatusOverlay from './PlaybackStatusOverlay';
 import PlayVideoControlsOverlay from './PlayVideoControlsOverlay';
+import PropTypes from 'prop-types';
 
 class VideoPlayer extends React.Component {
   constructor(props) {
@@ -18,12 +19,17 @@ class VideoPlayer extends React.Component {
       },
       calculatedVideoHeight: 1,
       calculatedVideoWidth: 1,
-      videoIsPortrait: false
+      isDeviceOrientationPortrait: true, // orientation of the screen
+      isFullScreen: false, // whether the video is fullscreen or not
+      videoIsPortrait: false // orientation of the video
     };
     this.videoPlayer = null;
   }
 
-  async componentDidMount() {
+  componentDidMount = async () => {
+    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
+    Dimensions.addEventListener('change', this.orientationChangeHandler);
+
     /* this._setupNetInfoListener();
 
     if (this.state.controlsState === CONTROL_STATES.SHOWN) {
@@ -31,6 +37,10 @@ class VideoPlayer extends React.Component {
     } */
 
     // Set audio mode to play even in silent mode (like the YouTube app)
+    this.initializeAudio();
+  };
+
+  initializeAudio = async () => {
     try {
       Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
@@ -38,7 +48,7 @@ class VideoPlayer extends React.Component {
         playsInSilentModeIOS: true,
         shouldDuckAndroid: true,
         interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-        playThroughEarpieceAndroid : false
+        playThroughEarpieceAndroid: false
       });
     } catch (e) {
       this.props.errorCallback({
@@ -47,18 +57,28 @@ class VideoPlayer extends React.Component {
         obj: e
       });
     }
-  }
+  };
 
+  orientationChangeHandler = async (dims) => {
+    const { width, height } = dims.window;
+    const isLandscape = width > height;
+    this.setState({ isDeviceOrientationPortrait: !isLandscape });
+
+    try {
+      await ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
+    } catch (error) {
+      console.log('orientationChangeHandler', { error });
+      debugger;
+    }
+  };
 
   componentWillUnmount = () => {
+    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+    Dimensions.removeEventListener('change', this.orientationChangeHandler);
     this.videoPlayer.unloadAsync();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-   
-
-
-
     if (this.state.naturalSize && !prevState.naturalSize) {
       console.log('calling calculateAspectRatioFit');
       this.calculateAspectRatioFit(
@@ -151,7 +171,7 @@ class VideoPlayer extends React.Component {
     this.videoPlayer.setPositionAsync(value);
   };
 
-  onPlaybackStatusUpdate = (status) => {
+  onPlaybackStatusUpdate = async(status) => {
     if (status.isBuffering) {
       this.setState({
         playStatus: 'BUFFERING',
@@ -173,30 +193,44 @@ class VideoPlayer extends React.Component {
         });
       }
     } else {
-      if (this.props.onError) {
-        console.log('onPlaybackStatusUpdate onError: ', this.props.onError);
-        this.props.onError({
-          msg: 'Unhandled playback status in onPlaybackStatusUpdate: ',
-          status
-        });
-      } else {
-        console.log('unknown playback status: ', status);
-      }
+      console.log('onPlaybackStatusUpdate Error: ', status.error );
+      /* 
+      TODO: revisit if Expo addresses this issue
+      if (status.error.includes('AudioTrack init failed')) {
+        console.log('re init audio');
+        await this.videoPlayer.unloadAsync();
+        this.initializeAudio();
+        this.forceUpdate()
+      } */
     }
   };
 
   toggleFullScreenVideo = () => {
-      if (this.state.videoIsPortrait) {
-        // TODO: if video is portrait, then don't change screen orientation
-        // to go full screen, instead, make this video grow
-        this.props.toggleFullScreen();
-      } else {
-        // if the video is widescreen then change the orientation to go full screen
-        this.props.toggleOrientation();
-        
-      }
-    };
+    // if the video is not portrait, then it is landscape, in that case
+    // we make the video fullscreen by changing the device orientation
+    // and notifying the parent component of the change so that it
+    // can remove any components from the screen
+    if (this.state.videoIsPortrait === false) {
+      // if the video is widescreen then change the orientation to go full screen
+      this.state.isDeviceOrientationPortrait
+        ? ScreenOrientation.allowAsync(ScreenOrientation.Orientation.LANDSCAPE)
+        : ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+    }
 
+    // No mater what the video orientation, we have to tell the parent
+    // about changing to or from fullscreen so that it can remove and
+    // bring back components from the display
+    // So here, we notify the parent component to make the required changes
+    this.props.toggleFullScreenCallback();
+
+    this.setState({ isFullScreen: !this.state.isFullScreen });
+  };
+
+  onPlayComplete = () => {
+    if (this.props.playCompleteCallback) {
+      this.props.playCompleteCallback();
+    }
+  };
 
   onReadyForDisplay = ({ naturalSize, status }) => {
     console.log({ naturalSize });
@@ -206,7 +240,6 @@ class VideoPlayer extends React.Component {
       durationMillis: status.durationMillis,
       positionMillis: status.positionMillis,
       videoIsPortrait: naturalSize.orientation === 'portrait'
-
     });
   };
 
@@ -284,7 +317,7 @@ class VideoPlayer extends React.Component {
           timeStampStyle={this.props.timeStampStyle}
           toggleFullScreenVideo={this.toggleFullScreenVideo}
           showTimeStamp={this.props.showTimeStamp}
-          isPortrait={this.props.isPortrait}
+          isFullScreen={this.state.isFullScreen}
         />
       </React.Fragment>
     );
@@ -292,3 +325,26 @@ class VideoPlayer extends React.Component {
 }
 
 export default VideoPlayer;
+
+VideoPlayer.propTypes = {
+  toggleFullScreenCallback: PropTypes.func.isRequired,
+  onPlayComplete: PropTypes.func,
+  videoProps: PropTypes.shape({
+    shouldPlay: PropTypes.bool,
+    source: PropTypes.shape({
+      uri: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired,
+  timeStampStyle: PropTypes.object,
+  showTimeStamp: PropTypes.bool,
+  resizeMode: PropTypes.string
+};
+
+VideoPlayer.defaultProps = {
+  showTimeStamp: true,
+  timeStampStyle: {
+    color: '#ffffff',
+    fontSize: 20
+  },
+  resizeMode: Video.RESIZE_MODE_CONTAIN
+};

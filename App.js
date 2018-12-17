@@ -1,26 +1,16 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Animated, Dimensions } from 'react-native';
 import { Text } from 'native-base';
-import * as Animatable from 'react-native-animatable';
-
-// original video player with modal as full screen
-import VideoPlayer1 from './VideoPlayer1';
-
-// based on https://github.com/expo/videoplayer
-import VideoPlayer2 from './VideoPlayer2';
-
-// based on https://github.com/expo/videoplayer and tring to rewrite it
-import VideoPlayer3 from './VideoPlayer3';
 
 // use smallInViewPlayer  from VideoPlayer1 as the basis, and don't use a modal for fullscreen
 // use fullScreen techniques from https://github.com/expo/videoplayer
-import VideoPlayer4 from './VideoPlayer4';
+import VideoPlayer from './VideoPlayer';
 
 import { Constants } from 'expo';
 import { Video, ScreenOrientation } from 'expo';
 
- const URI =
-('https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4');
+const URI =
+  'https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4';
 // const URI = 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
 
 const random_rgba = () => {
@@ -45,47 +35,16 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPortrait: true,
       isFullScreen: false
     };
-  }
-  componentDidMount = () => {
-    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
-    Dimensions.addEventListener('change', this.orientationChangeHandler);
-  };
-
-  componentWillUnmount = () => {
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
-    Dimensions.removeEventListener('change', this.orientationChangeHandler);
+  }
+
+  toggleFullScreenCallback = () => {
+    this.setState({ isFullScreen: !this.state.isFullScreen }, () => {
+      console.log({ isFullScreen: this.state.isFullScreen });
+    });
   };
-
-  orientationChangeHandler = async (dims) => {
-    const { width, height } = dims.window;
-    const isLandscape = width > height;
-    this.setState({ isPortrait: !isLandscape });
-
-    try {
-      await ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
-    } catch (error) {
-      console.log('orientationChangeHandler', { error });
-      debugger;
-    }
-  };
-
-  toggleOrientation = () => {
-    this.state.isPortrait
-      ? ScreenOrientation.allowAsync(ScreenOrientation.Orientation.LANDSCAPE)
-      : ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
-  };
-
-  toggleFullScreen = () => {
-    this.setState({isFullScreen: !this.state.isFullScreen})
-  };
-
-  onPlayComplete = () => {
-    console.log('onPlayComplete');
-  };
-
   render = () => {
     return (
       <View style={styles.container}>
@@ -99,15 +58,13 @@ export default class App extends React.Component {
         >
           Video Player Demo App
         </Text>
-        {!this.state.isFullScreen ? (
-          <Animatable.View
-            style={{ flex: 1, backgroundColor: '#E5CCFF' }}
-            animation={this.state.isPortrait ? 'fadeInDownBig' : 'fadeOutUpBig'}
-          >
+        {this.state.isFullScreen ? null : (
+          <Animated.View style={{ flex: 1, backgroundColor: '#E5CCFF' }}>
             <Text>Boundary Area</Text>
-          </Animatable.View>
-        ) : null}
-        <View
+          </Animated.View>
+        )}
+
+        <Animated.View
           style={{
             backgroundColor: 'rgba(255,255,255,.5)',
             padding: 5,
@@ -115,7 +72,7 @@ export default class App extends React.Component {
             flex: 2
           }}
         >
-          <VideoPlayer4
+          <VideoPlayer
             videoProps={{
               shouldPlay: true,
               resizeMode: Video.RESIZE_MODE_CONTAIN,
@@ -123,24 +80,22 @@ export default class App extends React.Component {
                 uri: URI
               }
             }}
-            isPortrait={this.state.isPortrait}
-            toggleOrientation={this.toggleOrientation}
-            toggleFullScreen={this.toggleFullScreen}
+            toggleFullScreenCallback={this.toggleFullScreenCallback}
+            onPlayComplete={() => {
+              console.log('play complete');
+            }}
             playFromPositionMillis={0}
             isLooping={false}
             showTimeStamp={true}
           />
-        </View>
-        {!this.state.isFullScreen ? (
-          <Animatable.View
+        </Animated.View>
+        {this.state.isFullScreen ? null : (
+          <Animated.View
             style={{ flex: 1, backgroundColor: 'rgba(255,255,255,.5)' }}
-            animation={
-              this.state.isPortrait ? 'fadeInUpBig' : 'fadeOutDownBig'
-            }
           >
             <Text>Boundary Area</Text>
-          </Animatable.View>
-        ) : null}
+          </Animated.View>
+        )}
       </View>
     );
   };
