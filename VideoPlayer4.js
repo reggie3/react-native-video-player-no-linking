@@ -17,7 +17,8 @@ class VideoPlayer extends React.Component {
         width: 0
       },
       calculatedVideoHeight: 1,
-      calculatedVideoWidth: 1
+      calculatedVideoWidth: 1,
+      videoIsPortrait: false
     };
     this.videoPlayer = null;
   }
@@ -185,10 +186,17 @@ class VideoPlayer extends React.Component {
   };
 
   toggleFullScreenVideo = () => {
-    this.props.isPortrait
-    ? this.props.switchToLandscape()
-    : this.props.switchToPortrait();
-  };
+      if (this.state.videoIsPortrait) {
+        // TODO: if video is portrait, then don't change screen orientation
+        // to go full screen, instead, make this video grow
+        this.props.toggleFullScreen();
+      } else {
+        // if the video is widescreen then change the orientation to go full screen
+        this.props.toggleOrientation();
+        
+      }
+    };
+
 
   onReadyForDisplay = ({ naturalSize, status }) => {
     console.log({ naturalSize });
@@ -196,7 +204,9 @@ class VideoPlayer extends React.Component {
     this.setState({
       naturalSize,
       durationMillis: status.durationMillis,
-      positionMillis: status.positionMillis
+      positionMillis: status.positionMillis,
+      videoIsPortrait: naturalSize.orientation === 'portrait'
+
     });
   };
 

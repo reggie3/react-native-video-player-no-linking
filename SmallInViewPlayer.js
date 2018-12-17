@@ -27,14 +27,11 @@ class SmallInViewPlayer extends React.Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    // this player is being displayed
     if (!prevProps.useFullScreenPlayer && this.props.useFullScreenPlayer) {
       // since we are leaving this small player we need to do the following:
       // stop this player's playback
       this.videoPlayer.pauseAsync();
     }
-
-    // this player is being hidden
     if (prevProps.useFullScreenPlayer && !this.props.useFullScreenPlayer) {
       // since we are coming to this small player
       // 1. check to see if there is a global postion stored
@@ -49,14 +46,8 @@ class SmallInViewPlayer extends React.Component {
         console.log({ globalPlayStatus: this.props.globalPlayStatus });
       }
 
-      // 3. Play or pause the video based on what the user was doing
-      // when they left the other player
-
-            // FIXME: can't actually play until the video player has been loaded
-
-      if (this.props.globalPlayStatus === 'PLAYING') {
-        // this.videoPlayer.playAsync();
-      }
+      // 3. play this video
+      this.videoPlayer.playAsync();
     }
 
     if (this.state.naturalSize && !prevState.naturalSize) {
@@ -161,14 +152,14 @@ class SmallInViewPlayer extends React.Component {
       this.setState({
         playStatus: 'STOPPED',
         playableDurationMillis: status.playableDurationMillis,
-        durationMillis: status.durationMillis
+        durationMillis: status.durationMillis,
         // showControls: true
       });
       if (status.isPlaying) {
         this.setState({
           playStatus: 'PLAYING',
           positionMillis: status.positionMillis,
-          playableDurationMillis: status.playableDurationMillis
+          playableDurationMillis: status.playableDurationMillis,
           // showControls: false
         });
       }
@@ -269,6 +260,7 @@ class SmallInViewPlayer extends React.Component {
           toggleFullScreenVideo={this.toggleFullScreenVideo}
           showTimeStamp={this.props.showTimeStamp}
         />
+        
       </React.Fragment>
     );
   }

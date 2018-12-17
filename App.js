@@ -19,7 +19,8 @@ import VideoPlayer4 from './VideoPlayer4';
 import { Constants } from 'expo';
 import { Video, ScreenOrientation } from 'expo';
 
-const URI = "https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4";
+ const URI =
+('https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4');
 // const URI = 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
 
 const random_rgba = () => {
@@ -44,7 +45,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPortrait: true
+      isPortrait: true,
+      isFullScreen: false
     };
   }
   componentDidMount = () => {
@@ -63,22 +65,21 @@ export default class App extends React.Component {
     this.setState({ isPortrait: !isLandscape });
 
     try {
-      let res = await ScreenOrientation.allowAsync(
-        ScreenOrientation.Orientation.ALL
-      );
-      console.log({ res });
+      await ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
     } catch (error) {
       console.log('orientationChangeHandler', { error });
       debugger;
     }
   };
 
-  switchToLandscape = () => {
-    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.LANDSCAPE);
+  toggleOrientation = () => {
+    this.state.isPortrait
+      ? ScreenOrientation.allowAsync(ScreenOrientation.Orientation.LANDSCAPE)
+      : ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
   };
 
-  switchToPortrait = () => {
-    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+  toggleFullScreen = () => {
+    this.setState({isFullScreen: !this.state.isFullScreen})
   };
 
   onPlayComplete = () => {
@@ -98,7 +99,7 @@ export default class App extends React.Component {
         >
           Video Player Demo App
         </Text>
-        {this.state.isPortrait ? (
+        {!this.state.isFullScreen ? (
           <Animatable.View
             style={{ flex: 1, backgroundColor: '#E5CCFF' }}
             animation={this.state.isPortrait ? 'fadeInDownBig' : 'fadeOutUpBig'}
@@ -123,17 +124,19 @@ export default class App extends React.Component {
               }
             }}
             isPortrait={this.state.isPortrait}
-            switchToLandscape={this.switchToLandscape}
-            switchToPortrait={this.switchToPortrait}
+            toggleOrientation={this.toggleOrientation}
+            toggleFullScreen={this.toggleFullScreen}
             playFromPositionMillis={0}
             isLooping={false}
             showTimeStamp={true}
           />
         </View>
-        {this.state.isPortrait ? (
+        {!this.state.isFullScreen ? (
           <Animatable.View
             style={{ flex: 1, backgroundColor: 'rgba(255,255,255,.5)' }}
-            animation={this.state.isPortrait ? 'fadeInUpBig' : 'fadeOutDownfadeInUpBig'}
+            animation={
+              this.state.isPortrait ? 'fadeInUpBig' : 'fadeOutDownBig'
+            }
           >
             <Text>Boundary Area</Text>
           </Animatable.View>
