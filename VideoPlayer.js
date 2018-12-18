@@ -65,7 +65,7 @@ class VideoPlayer extends React.Component {
     this.setState({ isDeviceOrientationPortrait: !isLandscape });
 
     try {
-      await ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
+      // await ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
     } catch (error) {
       console.log('orientationChangeHandler', { error });
       debugger;
@@ -171,7 +171,7 @@ class VideoPlayer extends React.Component {
     this.videoPlayer.setPositionAsync(value);
   };
 
-  onPlaybackStatusUpdate = async(status) => {
+  onPlaybackStatusUpdate = async (status) => {
     if (status.isBuffering) {
       this.setState({
         playStatus: 'BUFFERING',
@@ -193,7 +193,7 @@ class VideoPlayer extends React.Component {
         });
       }
     } else {
-      console.log('onPlaybackStatusUpdate Error: ', status.error );
+      console.log('onPlaybackStatusUpdate Error: ', status.error);
       /* 
       TODO: revisit if Expo addresses this issue
       if (status.error.includes('AudioTrack init failed')) {
@@ -211,10 +211,15 @@ class VideoPlayer extends React.Component {
     // and notifying the parent component of the change so that it
     // can remove any components from the screen
     if (this.state.videoIsPortrait === false) {
+      debugger;
       // if the video is widescreen then change the orientation to go full screen
       this.state.isDeviceOrientationPortrait
         ? ScreenOrientation.allowAsync(ScreenOrientation.Orientation.LANDSCAPE)
         : ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+    } else {
+      // if the video is a portrait mode video, ensure
+      // the orientation remains in portrait
+      ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
     }
 
     // No mater what the video orientation, we have to tell the parent
