@@ -11,8 +11,8 @@ class PlaybackStatusOverlay extends React.Component {
         style={{
           position: 'absolute',
           bottom: 0,
-          left: 0,
-          right: 0,
+          left: -10,
+          right: -10,
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',

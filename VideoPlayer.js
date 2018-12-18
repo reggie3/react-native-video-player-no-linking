@@ -27,7 +27,7 @@ class VideoPlayer extends React.Component {
   }
 
   componentDidMount = async () => {
-    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
+    // ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
     Dimensions.addEventListener('change', this.orientationChangeHandler);
 
     /* this._setupNetInfoListener();
@@ -65,7 +65,7 @@ class VideoPlayer extends React.Component {
     this.setState({ isDeviceOrientationPortrait: !isLandscape });
 
     try {
-      // removed to keep screen from chaing orientation automatically when 
+      // removed to keep screen from chaing orientation automatically when
       // the device orientation changes
       // await ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
     } catch (error) {
@@ -253,13 +253,23 @@ class VideoPlayer extends React.Component {
   render() {
     const videoWidth = Dimensions.get('window').width;
     const videoHeight = videoWidth * (9 / 16);
-    const centeredContentWidth = 60;
 
     return (
-      <React.Fragment>
+      <View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: this.props.playerPadding
+        }}
+      >
         <View
+          id="videoPlayer container"
           style={{
             ...StyleSheet.absoluteFillObject,
+
             backgroundColor: 'rgba(0, 0, 0, 0)',
             display: 'flex',
             justifyContent: 'center',
@@ -275,8 +285,11 @@ class VideoPlayer extends React.Component {
             }}
             style={{
               flex: 1,
-              width: videoWidth,
+              // width: this.isFullScreen ? videoWidth : videoWidth - this.props.playerPadding,
+              // height: this.isFullScreen ? videoHeight : videoHeight - this.props.playerPadding,
+              width: this.isFullScreen ? videoWidth : videoWidth - this.props.playerPadding,
               height: videoHeight,
+
               elevation: 5,
               shadowOffset: { width: 5, height: 3 },
               shadowColor: 'black',
@@ -326,7 +339,7 @@ class VideoPlayer extends React.Component {
           showTimeStamp={this.props.showTimeStamp}
           isFullScreen={this.state.isFullScreen}
         />
-      </React.Fragment>
+      </View>
     );
   }
 }
@@ -344,7 +357,8 @@ VideoPlayer.propTypes = {
   }).isRequired,
   timeStampStyle: PropTypes.object,
   showTimeStamp: PropTypes.bool,
-  resizeMode: PropTypes.string
+  resizeMode: PropTypes.string,
+  playerPadding: PropTypes.number
 };
 
 VideoPlayer.defaultProps = {
@@ -353,5 +367,6 @@ VideoPlayer.defaultProps = {
     color: '#ffffff',
     fontSize: 20
   },
-  resizeMode: Video.RESIZE_MODE_CONTAIN
+  resizeMode: Video.RESIZE_MODE_CONTAIN,
+  playerPadding: 0
 };

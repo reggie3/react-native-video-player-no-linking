@@ -9,9 +9,9 @@ import VideoPlayer from './VideoPlayer';
 import { Constants } from 'expo';
 import { Video, ScreenOrientation } from 'expo';
 
-// const URI =
-//   'https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4';
-const URI = 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
+ const URI =
+   'https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4';
+// const URI = 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
 
 const random_rgba = () => {
   var o = Math.round,
@@ -64,12 +64,12 @@ export default class App extends React.Component {
           </Animated.View>
         )}
 
-        <Animated.View
+        <View
           style={{
-            backgroundColor: 'rgba(255,255,255,.5)',
-            padding: 5,
+            backgroundColor: 'rgba(25,100,255,0)',
+            padding: 15,
             display: 'flex',
-            flex: 2
+            flex: 2,
           }}
         >
           <VideoPlayer
@@ -80,6 +80,7 @@ export default class App extends React.Component {
                 uri: URI
               }
             }}
+            playerPadding={0}
             toggleFullScreenCallback={this.toggleFullScreenCallback}
             playCompleteCallback={() => {
               console.log('play complete');
@@ -88,7 +89,7 @@ export default class App extends React.Component {
             isLooping={false}
             showTimeStamp={true}
           />
-        </Animated.View>
+        </View>
         {this.state.isFullScreen ? null : (
           <Animated.View
             style={{ flex: 1, backgroundColor: 'rgba(255,255,255,.5)' }}
