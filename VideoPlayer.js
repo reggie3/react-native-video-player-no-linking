@@ -253,7 +253,7 @@ class VideoPlayer extends React.Component {
   render() {
     const fullScreenVideoWidth = Dimensions.get('window').width;
     const fullScreenVideoHeight = Dimensions.get('window').height;
-
+    console.log({fullScreenVideoWidth}, {fullScreenVideoHeight});
     return (
       <View
         style={{
