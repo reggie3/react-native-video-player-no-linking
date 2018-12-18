@@ -139,12 +139,12 @@ class VideoPlayer extends React.Component {
           isReady: true
         },
         () => {
-          /*  console.log(
+          console.log(
             'View: ',
             this.state.viewDimensions.width,
             ', ',
             this.state.viewDimensions.width
-          ); */
+          ); 
         }
       );
     }
@@ -251,8 +251,8 @@ class VideoPlayer extends React.Component {
   };
 
   render() {
-    const videoWidth = Dimensions.get('window').width;
-    const videoHeight = videoWidth * (9 / 16);
+    const fullScreenWideoWidth = Dimensions.get('window').width;
+    const fullScreenHeight = fullScreenWideoWidth * (9 / 16);
 
     return (
       <View
@@ -287,8 +287,8 @@ class VideoPlayer extends React.Component {
               flex: 1,
               // width: this.isFullScreen ? videoWidth : videoWidth - this.props.playerPadding,
               // height: this.isFullScreen ? videoHeight : videoHeight - this.props.playerPadding,
-              width: this.isFullScreen ? videoWidth : videoWidth - this.props.playerPadding,
-              height: videoHeight,
+              width: this.state.viewDimensions.width || 10,
+              height: this.state.viewDimensions.height || 10,
 
               elevation: 5,
               shadowOffset: { width: 5, height: 3 },

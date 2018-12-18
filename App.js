@@ -45,6 +45,7 @@ export default class App extends React.Component {
       console.log({ isFullScreen: this.state.isFullScreen });
     });
   };
+  
   render = () => {
     return (
       <View style={styles.container}>
