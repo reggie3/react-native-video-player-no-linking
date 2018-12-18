@@ -80,7 +80,6 @@ export default class App extends React.Component {
                 uri: URI
               }
             }}
-            playerPadding={0}
             toggleFullScreenCallback={this.toggleFullScreenCallback}
             playCompleteCallback={() => {
               console.log('play complete');
@@ -88,6 +87,7 @@ export default class App extends React.Component {
             playFromPositionMillis={0}
             isLooping={false}
             showTimeStamp={true}
+            playerPadding={10}
           />
         </View>
         {this.state.isFullScreen ? null : (

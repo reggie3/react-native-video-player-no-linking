@@ -351,6 +351,7 @@ VideoPlayer.propTypes = {
   playCompleteCallback: PropTypes.func,
   videoProps: PropTypes.shape({
     shouldPlay: PropTypes.bool,
+    resizeMode: PropTypes.string,
     source: PropTypes.shape({
       uri: PropTypes.string.isRequired
     }).isRequired
@@ -367,6 +368,8 @@ VideoPlayer.defaultProps = {
     color: '#ffffff',
     fontSize: 20
   },
-  resizeMode: Video.RESIZE_MODE_CONTAIN,
+  videoProps: {
+    resizeMode: Video.RESIZE_MODE_CONTAIN
+  },
   playerPadding: 0
 };
