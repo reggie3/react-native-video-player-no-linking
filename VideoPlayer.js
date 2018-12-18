@@ -251,8 +251,8 @@ class VideoPlayer extends React.Component {
   };
 
   render() {
-    const fullScreenWideoWidth = Dimensions.get('window').width;
-    const fullScreenHeight = fullScreenWideoWidth * (9 / 16);
+    const fullScreenVideoWidth = Dimensions.get('window').width;
+    const fullScreenVideoHeight = Dimensions.get('window').height;
 
     return (
       <View
@@ -287,8 +287,8 @@ class VideoPlayer extends React.Component {
               flex: 1,
               // width: this.isFullScreen ? videoWidth : videoWidth - this.props.playerPadding,
               // height: this.isFullScreen ? videoHeight : videoHeight - this.props.playerPadding,
-              width: this.state.viewDimensions.width || 10,
-              height: this.state.viewDimensions.height || 10,
+              width: fullScreenVideoWidth - this.props.playerPadding,
+              height: fullScreenVideoHeight,
 
               elevation: 5,
               shadowOffset: { width: 5, height: 3 },
