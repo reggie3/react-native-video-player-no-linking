@@ -335,7 +335,7 @@ export default VideoPlayer;
 
 VideoPlayer.propTypes = {
   toggleFullScreenCallback: PropTypes.func.isRequired,
-  onPlayComplete: PropTypes.func,
+  playCompleteCallback: PropTypes.func,
   videoProps: PropTypes.shape({
     shouldPlay: PropTypes.bool,
     source: PropTypes.shape({

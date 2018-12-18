@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Animated, Dimensions } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
 import { Text } from 'native-base';
 
 // use smallInViewPlayer  from VideoPlayer1 as the basis, and don't use a modal for fullscreen
@@ -81,7 +81,7 @@ export default class App extends React.Component {
               }
             }}
             toggleFullScreenCallback={this.toggleFullScreenCallback}
-            onPlayComplete={() => {
+            playCompleteCallback={() => {
               console.log('play complete');
             }}
             playFromPositionMillis={0}
