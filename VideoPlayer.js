@@ -65,6 +65,8 @@ class VideoPlayer extends React.Component {
     this.setState({ isDeviceOrientationPortrait: !isLandscape });
 
     try {
+      // removed to keep screen from chaing orientation automatically when 
+      // the device orientation changes
       // await ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
     } catch (error) {
       console.log('orientationChangeHandler', { error });
