@@ -64,7 +64,7 @@ gulp.task('git-push', () => {
 });
 
 gulp.task('git-push-beta', () => {
-  return run('git push origin 5-with-sizable-icons').exec();
+  return run('git push origin beta').exec();
 });
 
 gulp.task('forExpo', (done) => {
