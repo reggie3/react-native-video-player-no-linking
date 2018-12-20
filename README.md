@@ -10,7 +10,9 @@
 
 [![npm](https://img.shields.io/npm/l/react-native-video-player-no-linking.svg)](https://github.com/react-native-component/react-native-video-player-no-linking/blob/master/LICENSE)
 
-[![YouTube Demo Video](https://img.youtube.com/vi/https://youtu.be/oHJmvOntDT8/0.jpg)](https://www.youtube.com/watch?v=https://youtu.be/oHJmvOntDT8)
+
+[![YouTube Demo Video](https://img.youtube.com/vi/oHJmvOntDT8/0.jpg)](https://www.youtube.com/watch?v=oHJmvOntDT8)
+
 
 ## Why Use This?
 
