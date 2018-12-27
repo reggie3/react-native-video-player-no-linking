@@ -6,7 +6,6 @@ const PlaybackSlider = (props) => {
   return (
     <View style={sliderStyles.container}>
       <Slider
-
         minimimValue={0}
         maximumValue={props.maximumValue}
         value={props.value}

@@ -32,7 +32,7 @@ You are not prohibited from using native code, and can find a better module to u
 
 ### Example
 
-Several of the this component passes through several of the properties used by the [Expo Video component](https://docs.expo.io/versions/latest/sdk/video) Please see that component's documentation for further details.
+This component passes through several of the properties used by the [Expo Video component](https://docs.expo.io/versions/latest/sdk/video) Please see that component's documentation for further details.
 
 All properties are optional unless otherwise noted.
 
